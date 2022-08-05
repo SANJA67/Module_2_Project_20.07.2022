@@ -1,10 +1,10 @@
 package com.ru.javarush.second_project.island_model.factory;
 
+import com.ru.javarush.second_project.island_model.animal_manipulator.ManagerGod;
 import com.ru.javarush.second_project.island_model.storage.DataBase;
 import com.ru.javarush.second_project.island_model.storage.ProgramCommunication;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class Settings {
     /**
@@ -16,34 +16,50 @@ public class Settings {
     public boolean flagRegulator(ProgramCommunication pc, boolean language) {
         double upperLimit = 1;
         double lowerLimit = 2;
-        int numberSettings = (int) numberCheck(pc, language, upperLimit, lowerLimit);
+        int numberSettings = (int) letAnswer(pc, language, upperLimit, lowerLimit);
         return numberSettings == 1;
     }
 
     public void selectsDefaultSettingsOrCustomSettings(ProgramCommunication pc, boolean language) {
-        Creator creator = Creator.getCreator();
+        ManagerGod god = ManagerGod.getManagerGod();
         DataBase dataBase = DataBase.getDataBase();
+        System.out.println("я тут");
         System.out.printf("%s%n", pc.defaultSettings(language));
 
         if (flagRegulator(pc, language)) {
-            settingsOptions(dataBase, creator, pc, language);
+            settingsOptions(dataBase, god, pc, language);
         } else {
             defaultInitializationAllVariables(dataBase);
-            creator.start();
+            god.start(settings, pc, language, dataBase);
         }
     }
 
-    private void settingsOptions(DataBase dataBase, Creator creator, ProgramCommunication pc, boolean language) {
+    /**
+     * Strongly recommends the user to select one of the required integer value options
+     */
+    public double letAnswer(ProgramCommunication pc, boolean language, double upperLimit, double lowerLimit) {
+        Scanner scanner = new Scanner(System.in);
+        String num;
+        do {
+            num = scanner.next();
+        } while (!isValidNumber(num, pc, language, upperLimit, lowerLimit));
+        return Double.parseDouble(num);
+    }
+
+    private void settingsOptions(DataBase dataBase, ManagerGod god, ProgramCommunication pc, boolean language) {
         int numberOfProcessedObjects = ProgramCommunication.OBJECT_NUMBER;
+
         System.out.printf("%s%n", ProgramCommunication.settingsGameObjects(language));
         boolean choice = flagRegulator(pc, language);
 
-        if (choice) parameterInitialization(dataBase, pc, language, numberOfProcessedObjects);
+        if (choice) {
+            parameterInitialization(dataBase, pc, language, numberOfProcessedObjects);
+        } else {
+            defaultInitializationRequiredVariable(dataBase, numberOfProcessedObjects);
+        }
 
-        else defaultInitializationRequiredVariable(dataBase, numberOfProcessedObjects);
-
-        if (flagSettingsOptions(numberOfProcessedObjects)) settingsOptions(dataBase, creator, pc, language);
-        if (flagCreatorStart(numberOfProcessedObjects)) creator.start();
+        if (flagSettingsOptions(numberOfProcessedObjects)) settingsOptions(dataBase, god, pc, language);
+        if (flagCreatorStart(numberOfProcessedObjects)) god.start(settings, pc, language, dataBase);
     }
 
     private void parameterInitialization(DataBase dataBase, ProgramCommunication pc, boolean language, int objectNumber) {
@@ -54,6 +70,7 @@ public class Settings {
                     (pc, language, pc.variableNameIsland(1), 1, objectNumber));
         } else {
             double[] doubles = new double[4];
+
             for (int i = 0; i < doubles.length; i++) {
                 doubles[i] = giveANumber
                         (pc, language, pc.variableNameAnimal(i), i, objectNumber);
@@ -70,15 +87,16 @@ public class Settings {
                 doubles[variableNumber][0], doubles[variableNumber][1]);
         System.out.print(appropriation);
 
-        return numberCheck(pc, language, doubles[variableNumber][0], doubles[variableNumber][1]);
+        return letAnswer(pc, language, doubles[variableNumber][0], doubles[variableNumber][1]);
     }
 
     private void defaultInitializationRequiredVariable(DataBase dataBase, int numberOfProcessedObjects) {
-        if (numberOfProcessedObjects == 0) {
+        if ((numberOfProcessedObjects == 0)) {
             dataBase.islandDimensions();
         } else {
             dataBase.getDoublesObject().add(dataBase.animalParameters(numberOfProcessedObjects));
         }
+
 
     }
 
@@ -124,26 +142,22 @@ public class Settings {
         };
     }
 
-    /**
-     * Strongly recommends the user to select one of the required integer value options
-     */
-    private double numberCheck(ProgramCommunication pc, boolean language, double upperLimit, double lowerLimit) {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        double numberSettings;
-        while (true) {
-            try {
-                String number = br.readLine();
-                numberSettings = Double.parseDouble(number);
-                if (numberSettings > (upperLimit - 0.01) && numberSettings < (lowerLimit + 0.01)) {
-                    break;
-                } else {
-                    System.out.println(pc.phrasesForNumberVerificationMethod(language));
-                }
-            } catch (Exception e) {
-                System.out.println(pc.phrasesForNumberVerificationMethodException(language));
+     private boolean isValidNumber
+             (String x, ProgramCommunication pc, boolean language, double upperLimit, double lowerLimit) {
+        try {
+            boolean isValidNumber;
+            double numberSettings = Double.parseDouble(x);
+            if (upperLimit == 1 && lowerLimit == 2) {
+                isValidNumber =  numberSettings == 1 || numberSettings == 2;
+            } else {
+                isValidNumber = numberSettings > (upperLimit - 0.01) && numberSettings < (lowerLimit + 0.01);
             }
+            if (!isValidNumber) System.out.print(pc.phrasesForNumberVerificationMethod(language));
+            return isValidNumber;
+        } catch (NumberFormatException e) {
+            System.out.print(pc.phrasesForNumberVerificationMethodException(language));
+            return false;
         }
-        return numberSettings;
     }
 
     private static Settings settings;

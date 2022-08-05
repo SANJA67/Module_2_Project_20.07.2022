@@ -18,6 +18,10 @@ public class Island {
         return island;
     }
 
+    public static Island getIsland() {
+        return island;
+    }
+
     public void look() {
         for (Cell[] cells : matrix) {
             for (Cell cell : cells) {

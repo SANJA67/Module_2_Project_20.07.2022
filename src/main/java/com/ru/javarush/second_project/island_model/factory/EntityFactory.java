@@ -11,15 +11,29 @@ public class EntityFactory {
         return dataBase.allVegetation();
     }
 
-    public Animal readyAnimal(String animalName, int id, int conditionX, int conditionY, DataBase dataBase) {
+    public Animal readyAnimal(String animalName, int id, DataBase dataBase) {
+
+        String icon = dataBase.giveMeAnIcon(id);
 
         double[] animalParameters = dataBase.animalParameters(id);
 
-        int[] whoToEat = dataBase.whoToEat(id);
+        int[] whoToEatAndHowToEat = dataBase.whoToEatAndHowToEat(id);
 
-        return dataBase.allAnimal(animalName, (int) animalParameters[1], (int) animalParameters[2], animalParameters[0],
-                animalParameters[3],
-                whoToEat, conditionX, conditionY, id);
+        return dataBase.allAnimal(animalName, icon, animalParameters[0], (int) animalParameters[2], animalParameters[3],
+                whoToEatAndHowToEat, id);
+    }
+
+    private static EntityFactory entityFactory;
+
+    private EntityFactory() {
+    }
+
+    public static synchronized EntityFactory getEntityFactory() {
+        if (entityFactory == null) {
+            entityFactory = new EntityFactory();
+            return entityFactory;
+        }
+        return entityFactory;
     }
 
 }

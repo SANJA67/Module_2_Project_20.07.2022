@@ -7,59 +7,19 @@ import com.ru.javarush.second_project.island_model.game_objects.vegetation.abstr
 import com.ru.javarush.second_project.island_model.storage.DataBase;
 
 import java.util.*;
+import java.util.stream.IntStream;
+
 
 public class Creator {
-    Random random = new Random();
 
-    public void start() {
+     public void start(Island island, DataBase dataBase, Random random) {
 
-        DataBase dataBase = DataBase.getDataBase();
-        EntityFactory entityFactory = new EntityFactory();
-
-
-        Island island = Island.creationIsland(new Cell[dataBase.getIslandWidth()][dataBase.getIslandLength()]);
-        for (int i = 0; i < dataBase.getIslandWidth(); i++) {
-            for (int j = 0; j < dataBase.getIslandLength(); j++) {
-                island.matrix[i][j] = new Cell(i, j,
-                        creatorAnimal(entityFactory, random, i, j, dataBase),
-                        creatorVegetation(entityFactory, random, dataBase));
-
-            }
-        }
-
-        FilePrinting.writingDataToAFileReceivedAfterProcessing(island, dataBase);
-/*
-        printTheCage(island, 5, 25);
-        printTheCage(island, 15, 75);
-        printTheCage(island, 0, 0);
-        printTheCage(island, 19, 99);
-
- */
-
-    }
-
-
-
-    void printTheCage(Island island, int x, int y) {
-        Cell cell = island.findCage(x, y);
-        List<Animal> animalList = island.findCage(x, y).getAnimalList();
-        List<Vegetation> vegetationList = island.findCage(x, y).getGrassList();
-        System.out.println(cell);
-        int a = 1;
-        for (int i = 0; i < animalList.size(); i++, a++) {
-            System.out.print("[" + animalList.get(i) + ']');
-            if (a % 43 == 0 && a != 0) {
-                System.out.println();
-            }
-        }
-
-        for (int i = 0; i < vegetationList.size(); i++, a++) {
-            System.out.print("[" + vegetationList.get(i) + ']');
-            if (a % 43 == 0) {
-                System.out.println();
-            }
-        }
-
+        EntityFactory entityFactory = EntityFactory.getEntityFactory();
+        IntStream.range(0, dataBase.getIslandWidth())
+                .forEach(i -> IntStream.range(0, dataBase.getIslandLength())
+                        .forEach(j -> island.matrix[i][j] = new Cell(i, j,
+                                        creatorAnimal(entityFactory, random, dataBase),
+                                        creatorVegetation(entityFactory, random, dataBase))));
     }
 
     public List<Vegetation> creatorVegetation(EntityFactory entityFactory, Random random, DataBase dataBase) {
@@ -76,7 +36,7 @@ public class Creator {
         return vegetationlInCell;
     }
 
-    public List<Animal> creatorAnimal(EntityFactory entityFactory, Random random, int conditionX, int conditionY, DataBase dataBase) {
+    public List<Animal> creatorAnimal(EntityFactory entityFactory, Random random, DataBase dataBase) {
 
         String[] animals = {"Wolf", "Boa", "Fox", "Bear", "Eagle", "Horse", "Deep", "Rabbit", "Mouse", "Goat",
                 "Sheep", "Boar", "Buffalo", "Duck", "Caterpillar"};
@@ -89,7 +49,7 @@ public class Creator {
 
             for (int j = 0; j < numberObjects; j++) {
 
-                animalInCell.add(entityFactory.readyAnimal(animals[i], i + 1, conditionX, conditionY, dataBase));
+                animalInCell.add(entityFactory.readyAnimal(animals[i], i + 1,  dataBase));
             }
         }
         Collections.shuffle(animalInCell);

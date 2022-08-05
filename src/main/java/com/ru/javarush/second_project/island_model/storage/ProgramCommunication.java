@@ -10,14 +10,26 @@ public class ProgramCommunication {
     public String defaultSettings(boolean language) {
 
         if (language) {
-            return "Set up the program \t\t\t\tpress '1'\n" +
-                    "Leave settings as default \t\tpress '2'";
+            return "Customize the program?" + "\n" + notReally(language);
 
         } else {
-            return "Настроить программу \t\t\t\tнажать '1'\n" +
-                    "Настройки оставить по умолчанию \tнажать '2'";
+            return "Настроить программу?" + "\n" + notReally(language);
+
         }
     }
+
+    private String notReally(boolean language) {
+
+        if (language) {
+            return "if \"Yes\"\t press '1'\n if \"No\"\t\t press '2'";
+
+        } else {
+            return "если \"Да\"\t\t нажмите '1'\nесли \"Нет\"\t\t нажмите '2'";
+
+        }
+    }
+
+
 
     public static String settingsGameObjects(boolean language) {
         if (language) {
@@ -102,6 +114,76 @@ public class ProgramCommunication {
             return "Type a number, not a text";
         } else {
             return "Введите число, а не текст";
+        }
+    }
+
+    public String gameOver(boolean language) {
+        if (language) {
+            return """
+                     ****************************************
+                     ** We are glad that you were with us. **
+                     ****************************************
+                    """;
+        } else {
+            return  """
+                     **********************************
+                     ** Мы рады, что вы были с нами. **
+                     **********************************
+                    """;
+        }
+    }
+
+    public String wantToStartTheGame(boolean language) {
+
+        if (language) {
+            return "Do you want to start the game?" + "\n" + notReally(language);
+
+        } else {
+            return "Хотите начать игру?" + "\n" + notReally(language);
+
+        }
+    }
+
+    public String seeTheCageOfTheIsland(boolean language) {
+
+        if (language) {
+            return "Would you like to see what the cage of the island looks like?" + "\n" + notReally(language);
+
+        } else {
+            return "Хотите увидеть как выглядит клетка острова?" + "\n" + notReally(language);
+
+        }
+    }
+
+    public String seeCellByCoordinates(boolean language) {
+
+        if (language) {
+            return "Do you want to see a specific cell? If not, then you will see cells with coordinates (0, 0), (1, 0), (0, 1)." + "\n" + notReally(language);
+
+        } else {
+            return "Вы хотите увидеть конкретную клетку? Если нет то вы увидите клетки с координатами (0, 0), (1, 0), (0, 1)." + "\n" + notReally(language);
+
+        }
+    }
+
+    public String cellСoordinateШnput(boolean language) {
+
+        if (language) {
+            return "Enter cell coordinates. \"X\" and \"Y\"";
+
+        } else {
+            return "Введите координаты клетки. \"Х\" и \"Y\"";
+
+        }
+    }
+
+    public String coordinateEntryConditions(boolean language) {
+        if (language) {
+            return "Enter only an integer, if you enter a floating point coordinate it will be rounded up to an integer.";
+
+        } else {
+            return "Вводите только целое число, если вы ведёте координату с плавающей точкой то она будет округленное до целого числа.";
+
         }
     }
 }

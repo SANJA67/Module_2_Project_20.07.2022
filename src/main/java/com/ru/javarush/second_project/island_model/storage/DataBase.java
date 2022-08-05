@@ -37,14 +37,14 @@ public class DataBase {
     }
 
     private int islandLength;
-    private  int islandWidth;
+    private int islandWidth;
 
     public void islandDimensions() {
         this.islandLength = 100;
         this.islandWidth = 20;
     }
 
-    public int[] whoToEat(int operationNumber) {
+    public int[] whoToEatAndHowToEat(int operationNumber) {
         return switch (operationNumber) {
             case 1 -> new int[]{0, 0, 0, 0, 0, 10, 15, 60, 80, 60, 70, 15, 10, 40, 0, 0};       //Волк
             case 2 -> new int[]{0, 0, 15, 0, 0, 0, 0, 20, 40, 0, 0, 0, 0, 10, 0, 0};            //Удав
@@ -88,54 +88,62 @@ public class DataBase {
 
     }
 
-    public Animal allAnimal(String animalName, int maxInCell, int speedCell, double weight, double eatUp,
-                            int[] whoToEat, int conditionX, int conditionY, int ID) {
+    public String giveMeAnIcon(int operationNumber) {
+        return switch (operationNumber) {
+            case 1 -> "\uD83D\uDC3A";             //Волк
+            case 2 -> "\uD83D\uDC0D";             //Удав
+            case 3 -> "\uD83E\uDD8A";              //Лиса
+            case 4 -> "\uD83D\uDC3B";            //Медведь
+            case 5 -> "\uD83E\uDD85";              //Орел
+            case 6 -> "\uD83D\uDC0E";           //Лошадь
+            case 7 -> "\uD83E\uDD8C";           //Олень
+            case 8 -> "\uD83D\uDC07";          //Кролик
+            case 9 -> "\uD83D\uDC01";       //Мышь
+            case 10 -> "\uD83D\uDC10";          //Коза
+            case 11 -> "\uD83D\uDC11";          //Овца
+            case 12 -> "\uD83D\uDC17";          //Кабан
+            case 13 -> "\uD83D\uDC03";         //Буйвол
+            case 14 -> "\uD83E\uDD86";         //Утка
+            case 15 -> "\uD83D\uDC1B";        //Гусеница
+
+            default -> null;
+        };
+    }
+
+    //animalName, icon, animalParameters[0], (int) animalParameters[3], whoToEatAndHowToEat, conditionX, conditionY
+    public Animal allAnimal
+    (String animalName, String icon, double weight, int speedCell, double maximumSatiety, int[] whoToEatAndHowToEat, int id) {
         return switch (animalName) {
             case "Wolf" ->
-                    new Wolf();            //Волк
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Wolf(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);            //Волк
             case "Boa" ->
-                    new Boa();             //Удав
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Boa(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);             //Удав
             case "Fox" ->
-                    new Fox();             //Лиса
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Fox(icon, weight, speedCell, maximumSatiety,  whoToEatAndHowToEat, id);             //Лиса
             case "Bear" ->
-                    new Bear();         //Медведь
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Bear(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);         //Медведь
             case "Eagle" ->
-                    new Eagle();           //Орел
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Eagle(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);           //Орел
             case "Horse" ->
-                    new Horse();         //Лошадь
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Horse(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);         //Лошадь
             case "Deep" ->
-                    new Deer();           //Олень
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Deer(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);           //Олень
             case "Rabbit" ->
-                    new Rabbit();        //Кролик
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Rabbit(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);        //Кролик
             case "Mouse" ->
-                    new Mouse();           //Мышь
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Mouse(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);           //Мышь
             case "Goat" ->
-                    new Goat();            //Коза
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Goat(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);            //Коза
             case "Sheep" ->
-                    new Sheep();           //Овца
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Sheep(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);           //Овца
             case "Boar" ->
-                    new Boar();           //Кабан
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Boar(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);           //Кабан
             case "Buffalo" ->
-                    new Buffalo();       //Буйвол
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Buffalo(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);       //Буйвол
             case "Duck" ->
-                    new Duck();            //Утка
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Duck(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);            //Утка
             case "Caterpillar" ->
-                    new Caterpillar(); //Гусеница
-            //maxInCell, speedCell, weight, eatUp, whoToEat, conditionX, conditionY, ID
+                    new Caterpillar(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id); //Гусеница
             default -> null;
         };
     }
