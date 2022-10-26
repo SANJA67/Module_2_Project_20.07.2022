@@ -3,19 +3,19 @@ package com.ru.javarush.second_project.island_model.game_objects.island;
 import com.ru.javarush.second_project.island_model.game_objects.animal.abstracts.Animal;
 import com.ru.javarush.second_project.island_model.game_objects.vegetation.abstracts.Vegetation;
 
-import java.util.List;
+import java.util.Set;
 
 public class Cell {
     int fieldCoordinateX;
     int fieldCoordinateY;
-    List<Animal> animalList;
-    List<Vegetation>  grassList;
+    Set<Animal> animalSet;
+    Set<Vegetation>  grassSet;
 
-    public Cell(int fieldCoordinateX, int fieldCoordinateY, List<Animal> animalList, List<Vegetation> grassList) {
+    public Cell(int fieldCoordinateX, int fieldCoordinateY, Set<Animal> animalSet, Set<Vegetation> grassSet) {
         this.fieldCoordinateX = fieldCoordinateX;
         this.fieldCoordinateY = fieldCoordinateY;
-        this.animalList = animalList;
-        this.grassList = grassList;
+        this.animalSet = animalSet;
+        this.grassSet = grassSet;
     }
 
     public int getFieldCoordinateX() {
@@ -26,22 +26,29 @@ public class Cell {
         return fieldCoordinateY;
     }
 
-    public List<Animal> getAnimalList() {
-        return animalList;
+    public Set<Animal> getAnimalSet() {
+        return animalSet;
     }
 
-    public List<Vegetation> getGrassList() {
-        return grassList;
+    public void setAnimalSet(Set<Animal> animalSet) {
+        this.animalSet = animalSet;
+    }
+
+    public Set<Vegetation> getGrassSet() {
+        return grassSet;
+    }
+
+    public void setGrassSet(Set<Vegetation> grassSet) {
+        this.grassSet = grassSet;
     }
 
     @Override
 
     public String toString() {
-        System.out.println();
         return "Cell " + "X = " + fieldCoordinateX +
                 ", Y = " + fieldCoordinateY +
-                ", A L = " + animalList +
-                ", G L = " + grassList +
+                ", A L = " + animalSet +
+                ", G L = " + grassSet +
                 '}';
     }
 }

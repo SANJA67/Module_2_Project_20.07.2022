@@ -6,7 +6,9 @@ import com.ru.javarush.second_project.island_model.game_objects.island.Island;
 import com.ru.javarush.second_project.island_model.game_objects.vegetation.abstracts.Vegetation;
 import com.ru.javarush.second_project.island_model.storage.DataBase;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.IntStream;
 
 
@@ -22,9 +24,9 @@ public class Creator {
                                         creatorVegetation(entityFactory, random, dataBase))));
     }
 
-    public List<Vegetation> creatorVegetation(EntityFactory entityFactory, Random random, DataBase dataBase) {
+    public Set<Vegetation> creatorVegetation(EntityFactory entityFactory, Random random, DataBase dataBase) {
 
-        List<Vegetation> vegetationlInCell = new ArrayList<>();
+        Set<Vegetation> vegetationlInCell = new CopyOnWriteArraySet<>();
 
         int numberObjects = random.nextInt((int) (dataBase.vegetationParameters()[1]));
 
@@ -32,27 +34,21 @@ public class Creator {
             vegetationlInCell.add(entityFactory.readyVegetation(dataBase, numberObjects));
         }
 
-
         return vegetationlInCell;
     }
 
-    public List<Animal> creatorAnimal(EntityFactory entityFactory, Random random, DataBase dataBase) {
+    public Set<Animal> creatorAnimal(EntityFactory entityFactory, Random random, DataBase dataBase) {
 
-        String[] animals = {"Wolf", "Boa", "Fox", "Bear", "Eagle", "Horse", "Deep", "Rabbit", "Mouse", "Goat",
-                "Sheep", "Boar", "Buffalo", "Duck", "Caterpillar"};
+        Set<Animal> animalInCell = new CopyOnWriteArraySet<>();
+        for (int i = 0; i < dataBase.animals.length; i++) {
 
-
-        List<Animal> animalInCell = new ArrayList<>();
-        for (int i = 0; i < animals.length; i++) {
-
-            int numberObjects = random.nextInt((int) (dataBase.animalParameters(i + 1)[1] + 1));
+            int numberObjects = random.nextInt((dataBase.getDoublesObject().get(i)[1].add(new BigDecimal("1.0"))).intValue());
 
             for (int j = 0; j < numberObjects; j++) {
 
-                animalInCell.add(entityFactory.readyAnimal(animals[i], i + 1,  dataBase));
+                animalInCell.add(entityFactory.readyAnimal(dataBase.animals[i], i + 1,  dataBase));
             }
         }
-        Collections.shuffle(animalInCell);
         return animalInCell;
     }
 

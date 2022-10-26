@@ -4,26 +4,16 @@ import com.ru.javarush.second_project.island_model.animal_manipulator.ManagerGod
 import com.ru.javarush.second_project.island_model.storage.DataBase;
 import com.ru.javarush.second_project.island_model.storage.ProgramCommunication;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Settings {
-    /**
-     * Sets the value of boolean language
-     * who will be responsible for the use in the program,
-     * either Russian or English
-     * depending on the value of the variable
-     */
-    public boolean flagRegulator(ProgramCommunication pc, boolean language) {
-        double upperLimit = 1;
-        double lowerLimit = 2;
-        int numberSettings = (int) letAnswer(pc, language, upperLimit, lowerLimit);
-        return numberSettings == 1;
-    }
 
-    public void selectsDefaultSettingsOrCustomSettings(ProgramCommunication pc, boolean language) {
+
+
+    public void setUpOrLeave(ProgramCommunication pc, boolean language) {
         ManagerGod god = ManagerGod.getManagerGod();
         DataBase dataBase = DataBase.getDataBase();
-        System.out.println("я тут");
         System.out.printf("%s%n", pc.defaultSettings(language));
 
         if (flagRegulator(pc, language)) {
@@ -34,17 +24,6 @@ public class Settings {
         }
     }
 
-    /**
-     * Strongly recommends the user to select one of the required integer value options
-     */
-    public double letAnswer(ProgramCommunication pc, boolean language, double upperLimit, double lowerLimit) {
-        Scanner scanner = new Scanner(System.in);
-        String num;
-        do {
-            num = scanner.next();
-        } while (!isValidNumber(num, pc, language, upperLimit, lowerLimit));
-        return Double.parseDouble(num);
-    }
 
     private void settingsOptions(DataBase dataBase, ManagerGod god, ProgramCommunication pc, boolean language) {
         int numberOfProcessedObjects = ProgramCommunication.OBJECT_NUMBER;
@@ -58,28 +37,29 @@ public class Settings {
             defaultInitializationRequiredVariable(dataBase, numberOfProcessedObjects);
         }
 
-        if (flagSettingsOptions(numberOfProcessedObjects)) settingsOptions(dataBase, god, pc, language);
-        if (flagCreatorStart(numberOfProcessedObjects)) god.start(settings, pc, language, dataBase);
+        if (flagPresenceOfObjects(numberOfProcessedObjects)) settingsOptions(dataBase, god, pc, language);
+
+        god.start(settings, pc, language, dataBase);
     }
 
     private void parameterInitialization(DataBase dataBase, ProgramCommunication pc, boolean language, int objectNumber) {
         if (objectNumber == 0) {
-            dataBase.setIslandLength((int) giveANumber
-                    (pc, language, pc.variableNameIsland(0), 0, objectNumber));
-            dataBase.setIslandWidth((int) giveANumber
-                    (pc, language, pc.variableNameIsland(1), 1, objectNumber));
+            dataBase.setIslandLength(giveANumber
+                    (pc, language, pc.variableNameIsland(0), 0, objectNumber).intValue());
+            dataBase.setIslandWidth( giveANumber
+                    (pc, language, pc.variableNameIsland(1), 1, objectNumber).intValue());
         } else {
-            double[] doubles = new double[4];
+            BigDecimal[] myBigDecimal = new BigDecimal[4];
 
-            for (int i = 0; i < doubles.length; i++) {
-                doubles[i] = giveANumber
+            for (int i = 0; i < myBigDecimal.length; i++) {
+                myBigDecimal[i] = giveANumber
                         (pc, language, pc.variableNameAnimal(i), i, objectNumber);
             }
-            dataBase.getDoublesObject().add(doubles);
+            dataBase.getDoublesObject().add(myBigDecimal);
         }
     }
 
-    private double giveANumber
+    private BigDecimal giveANumber
             (ProgramCommunication pc, boolean language, String appropriation, int variableNumber, int objectNumber) {
         double[][] doubles = animalParametersLimit(objectNumber);
 
@@ -107,15 +87,10 @@ public class Settings {
         }
     }
 
-    private boolean flagCreatorStart(int numberOfProcessedObjects) {
+    private boolean flagPresenceOfObjects(int numberOfProcessedObjects) {
         int numberOfObjects = 16;
         int correctionFactorZero = 1;
-        return numberOfProcessedObjects == numberOfObjects - correctionFactorZero;
-    }
 
-    private boolean flagSettingsOptions(int numberOfProcessedObjects) {
-        int numberOfObjects = 16;
-        int correctionFactorZero = 1;
         return numberOfProcessedObjects != numberOfObjects - correctionFactorZero;
     }
 
@@ -140,6 +115,31 @@ public class Settings {
 
             default -> throw new IllegalStateException("Unexpected value: " + operationNumber);
         };
+    }
+
+    /**
+     * Sets the value of boolean language
+     * who will be responsible for the use in the program,
+     * either Russian or English
+     * depending on the value of the variable
+     */
+    public boolean flagRegulator(ProgramCommunication pc, boolean language) {
+        double upperLimit = 1;
+        double lowerLimit = 2;
+        int numberSettings = letAnswer(pc, language, upperLimit, lowerLimit).intValue();
+        return numberSettings == 1;
+    }
+
+    /**
+     * Strongly recommends the user to select one of the required integer value options
+     */
+    public BigDecimal letAnswer(ProgramCommunication pc, boolean language, double upperLimit, double lowerLimit) {
+        Scanner scanner = new Scanner(System.in);
+        String num;
+        do {
+            num = scanner.next();
+        } while (!isValidNumber(num, pc, language, upperLimit, lowerLimit));
+        return new BigDecimal("" + num);
     }
 
      private boolean isValidNumber

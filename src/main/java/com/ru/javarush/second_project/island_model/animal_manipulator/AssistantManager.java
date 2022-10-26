@@ -1,5 +1,6 @@
 package com.ru.javarush.second_project.island_model.animal_manipulator;
 
+import com.ru.javarush.second_project.island_model.factory.EntityFactory;
 import com.ru.javarush.second_project.island_model.factory.Settings;
 import com.ru.javarush.second_project.island_model.game_objects.animal.abstracts.Animal;
 import com.ru.javarush.second_project.island_model.game_objects.island.Island;
@@ -8,8 +9,8 @@ import com.ru.javarush.second_project.island_model.report.Statistics;
 import com.ru.javarush.second_project.island_model.storage.DataBase;
 import com.ru.javarush.second_project.island_model.storage.ProgramCommunication;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class AssistantManager {
 
@@ -23,10 +24,10 @@ public class AssistantManager {
             System.out.println("В пределах от 0 до " + width);
             System.out.print("X = ");
             int pperLimit = 0;
-            int x = (int) settings.letAnswer(pc, language, pperLimit, width);
+            int x = settings.letAnswer(pc, language, pperLimit, width).intValue();
             System.out.println("В пределах от 0 до " + length);
             System.out.print("Y = ");
-            int y = (int) settings.letAnswer(pc, language, pperLimit, length);
+            int y = settings.letAnswer(pc, language, pperLimit, length).intValue();
 
             statistics.printTheCage(island, x, y);
         } else {
@@ -37,7 +38,8 @@ public class AssistantManager {
     }
 
     protected void seeCage
-            (Settings settings, ProgramCommunication pc, boolean language, int width, int length, Island island, AssistantManager assistantManager, Statistics statistics) {
+            (Settings settings, ProgramCommunication pc, boolean language, int width, int length, Island island,
+             AssistantManager assistantManager, Statistics statistics) {
         System.out.println(pc.seeTheCageOfTheIsland(language));
 
         if (settings.flagRegulator(pc, language)) {
@@ -49,28 +51,58 @@ public class AssistantManager {
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < length; j++) {
-                List<Animal> animalList = island.findCage(i, j).getAnimalList();
-                List<Vegetation> vegetationList = island.findCage(i, j).getGrassList();
+                Set<Animal> animalList = island.findCage(i, j).getAnimalSet();
+                Set<Vegetation> vegetationList = island.findCage(i, j).getGrassSet();
                 for (Animal animal : animalList) {
                     animal.eat(animalList, vegetationList, random, dataBase);
                 }
-
             }
         }
- /*
-        IntStream.range(0, dataBase.getIslandWidth())
-                .forEach(i -> IntStream.range(0, dataBase.getIslandLength())
-                        .forEach(j -> island.findCage(i, j).getAnimalList().get(j).eat()));
+    }
 
+    public void animalsReproduction(Island island, Random random, int width, int length, DataBase dataBase, EntityFactory entityFactory) {
+        System.out.println();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
 
+                Set<Animal> newbornsAnimal = new CopyOnWriteArraySet<>();
 
-        Cell cell = ;
+                Set<Animal> animals = island.findCage(i, j).getAnimalSet();
 
-        List<Animal> animalList = island.findCage(x, y).getAnimalList();
+                for (Animal animal : animals) {
 
-        //List<Vegetation> vegetationList = island.findCage(x, y).getGrassList();
+                    Set<Animal> newborns = animal.reproduction(island, island.findCage(i, j).getAnimalSet(), random, dataBase, entityFactory);
+                    newbornsAnimal.addAll(newborns);
+                }
+                island.findCage(i, j).getAnimalSet().addAll(newbornsAnimal);
+                newbornsAnimal.clear();
+            }
+        }
+    }
 
- */
+    public void moving(Island island, Random random, int width, int length, DataBase dataBase) {
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                Set<Animal> animalList = island.findCage(i, j).getAnimalSet();
+                //Iterator
+                for (Animal animal : animalList) {
+                    int[] newCoordinates = animal.wentToAnotherCell(island, random, dataBase, i, j);
+                    animalList.remove(animal);
+                    island.findCage(newCoordinates[0], newCoordinates[1]).getAnimalSet().add(animal);
+
+                }
+            }
+        }
+    }
+
+    public void dies(Island island, int width, int length, DataBase dataBase) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                Set<Animal> animalList = island.findCage(i, j).getAnimalSet();
+                animalList.removeIf(animal ->  dataBase.animalParameters(animal.getId())[0].compareTo(animal.getWeight()) > 0);
+            }
+        }
     }
 
     private static AssistantManager assistantManager;
@@ -85,6 +117,4 @@ public class AssistantManager {
         }
         return assistantManager;
     }
-
-
 }

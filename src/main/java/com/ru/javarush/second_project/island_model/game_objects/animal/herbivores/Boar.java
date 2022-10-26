@@ -1,26 +1,13 @@
 package com.ru.javarush.second_project.island_model.game_objects.animal.herbivores;
 
-import com.ru.javarush.second_project.island_model.game_objects.animal.abstracts.Animal;
 import com.ru.javarush.second_project.island_model.game_objects.animal.abstracts.Herbiovores;
-import com.ru.javarush.second_project.island_model.game_objects.vegetation.abstracts.Vegetation;
-import com.ru.javarush.second_project.island_model.storage.DataBase;
 
-import java.util.List;
-import java.util.Random;
+import java.math.BigDecimal;
 
 public class Boar extends Herbiovores {
 
-    int[] whoToEatAndHowToEat;
-    double maximumSatiety;
-    public Boar(String icon, double weight, int speedCell, double maximumSatiety,
-                int[] whoToEatAndHowToEat, int id) {
-        super(icon, weight, speedCell, id);
-        this.whoToEatAndHowToEat = whoToEatAndHowToEat;
-        this.maximumSatiety = maximumSatiety;
+    public Boar(String icon, BigDecimal weight, int speedCell, BigDecimal maximumSatiety, int[] whoToEatAndHowToEat, int id) {
+        super(icon, weight, speedCell, id, maximumSatiety, whoToEatAndHowToEat);
     }
 
-    @Override
-    public void eat(List<Animal> animalList, List<Vegetation> vegetationList, Random random, DataBase dataBase) {
-
-    }
 }

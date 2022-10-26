@@ -21,7 +21,7 @@ public class ProgramCommunication {
     private String notReally(boolean language) {
 
         if (language) {
-            return "if \"Yes\"\t press '1'\n if \"No\"\t\t press '2'";
+            return "if \"Yes\"\t press '1'\nif \"No\"\t\t press '2'";
 
         } else {
             return "если \"Да\"\t\t нажмите '1'\nесли \"Нет\"\t\t нажмите '2'";
@@ -140,6 +140,17 @@ public class ProgramCommunication {
 
         } else {
             return "Хотите начать игру?" + "\n" + notReally(language);
+
+        }
+    }
+
+    public String wantToProceedTheGame(boolean language) {
+
+        if (language) {
+            return "Do you want to continue the game?" + "\n" + notReally(language);
+
+        } else {
+            return "Хотите продолжить игру?" + "\n" + notReally(language);
 
         }
     }

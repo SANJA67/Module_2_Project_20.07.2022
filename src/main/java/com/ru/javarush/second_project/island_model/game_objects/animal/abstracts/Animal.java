@@ -1,39 +1,55 @@
 package com.ru.javarush.second_project.island_model.game_objects.animal.abstracts;
 
+import com.ru.javarush.second_project.island_model.factory.EntityFactory;
+import com.ru.javarush.second_project.island_model.game_objects.island.Island;
 import com.ru.javarush.second_project.island_model.game_objects.vegetation.abstracts.Vegetation;
 import com.ru.javarush.second_project.island_model.storage.DataBase;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class Animal {
+    private boolean isIEat;
+    private boolean isTheyEatMe;
+    private boolean isIHaveMultiplied;
+    private boolean iWent;
 
-    private String icon;
-    private int speedCell;
-    private double weight;
-    private int id;
 
 
-    protected Animal(String icon, double weight, int speedCell, int id) {
+    private final String icon;
+    private BigDecimal weight;
+    private final int id;
+
+
+    protected Animal(String icon, BigDecimal weight, int id) {
         this.icon = icon;
-        this.speedCell = speedCell;
         this.weight = weight;
         this.id = id;
+        this.setIEat(true);
+        this.setTheyEatMe(true);
+        this.setIHaveMultiplied(true);
+        this.setiWent(true);
     }
 
-    public abstract void eat(List<Animal> animalList, List<Vegetation> vegetationList, Random random, DataBase dataBase);
+    public abstract void eat(Set<Animal> animalList, Set<Vegetation> vegetationList, Random random, DataBase dataBase);
+    public abstract Set<Animal> reproduction(Island island, Set<Animal> animalList, Random random, DataBase dataBase, EntityFactory entityFactory);
+    public abstract int[] wentToAnotherCell(Island island, Random random, DataBase dataBase, int x, int y);
 
-    //метод передвигаться
-    //метод размножаться
-    //метод умирать от голода
-
-
-    public void setWeight(double weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
 
-    public double getWeight() {
+    public BigDecimal getWeight() {
         return weight;
+    }
+
+    public boolean isiWent() {
+        return iWent;
+    }
+
+    public void setiWent(boolean iWent) {
+        this.iWent = iWent;
     }
 
     public int getId() {
@@ -48,4 +64,29 @@ public abstract class Animal {
     public String toString() {
         return icon;
     }
+
+    public boolean isIEat() {
+        return isIEat;
+    }
+
+    public void setIEat(boolean iEat) {
+        isIEat = iEat;
+    }
+
+    public boolean isTheyEatMe() {
+        return isTheyEatMe;
+    }
+
+    public void setTheyEatMe(boolean theyEatMe) {
+        isTheyEatMe = theyEatMe;
+    }
+
+    public boolean isIHaveMultiplied() {
+        return isIHaveMultiplied;
+    }
+
+    public void setIHaveMultiplied(boolean iHaveMultiplied) {
+        isIHaveMultiplied = iHaveMultiplied;
+    }
+
 }

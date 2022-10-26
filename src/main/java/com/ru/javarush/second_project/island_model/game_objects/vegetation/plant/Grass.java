@@ -2,16 +2,12 @@ package com.ru.javarush.second_project.island_model.game_objects.vegetation.plan
 
 import com.ru.javarush.second_project.island_model.game_objects.vegetation.abstracts.Vegetation;
 
+import java.math.BigDecimal;
+
 public class Grass extends Vegetation {
 
-    String icon = "\uD83C\uDF3F";
 
-    public String getIcon() {
-        return icon;
-    }
-
-    @Override
-    public String toString() {
-        return icon;
+    public Grass(BigDecimal weight) {
+        super(weight);
     }
 }

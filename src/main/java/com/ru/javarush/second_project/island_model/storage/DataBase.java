@@ -6,17 +6,24 @@ import com.ru.javarush.second_project.island_model.game_objects.animal.predatory
 import com.ru.javarush.second_project.island_model.game_objects.vegetation.abstracts.Vegetation;
 import com.ru.javarush.second_project.island_model.game_objects.vegetation.plant.Grass;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DataBase {
 
+    public int[] numberOfOffspring = {6, 50, 14, 4, 4, 2, 3, 12, 11, 5, 4, 10, 3, 21, 10};
+    public String[] animals = {"Wolf", "Boa", "Fox", "Bear", "Eagle", "Horse", "Deep", "Rabbit", "Mouse", "Goat",
+            "Sheep", "Boar", "Buffalo", "Duck", "Caterpillar"};
     private static DataBase dataBase;
+    public static final int ATTEMPTS = 1;
+    public static final int ATTEMPTS_REPRODUCTION = 100;
 
-    private final List<double[]> doublesObject = new ArrayList<>();
+    private List<BigDecimal[]> doublesObject = new ArrayList<>();
 
 
-    public List<double[]> getDoublesObject() {
+    public List<BigDecimal[]> getDoublesObject() {
         return doublesObject;
     }
 
@@ -40,8 +47,8 @@ public class DataBase {
     private int islandWidth;
 
     public void islandDimensions() {
-        this.islandLength = 100;
-        this.islandWidth = 20;
+        this.islandLength = 3;
+        this.islandWidth = 2;
     }
 
     public int[] whoToEatAndHowToEat(int operationNumber) {
@@ -65,23 +72,23 @@ public class DataBase {
         };
     }
 
-    public double[] animalParameters(int operationNumber) {
+    public BigDecimal[] animalParameters(int operationNumber) {
         return switch (operationNumber) {
-            case 1 -> new double[]{50, 30, 3, 8};             //Волк
-            case 2 -> new double[]{15, 30, 1, 3};             //Удав
-            case 3 -> new double[]{8, 30, 2, 2};              //Лиса
-            case 4 -> new double[]{500, 5, 2, 80};            //Медведь
-            case 5 -> new double[]{6, 20, 3, 1};              //Орел
-            case 6 -> new double[]{400, 20, 4, 60};           //Лошадь
-            case 7 -> new double[]{300, 20, 4, 50};           //Олень
-            case 8 -> new double[]{2, 150, 2, 0.45};          //Кролик
-            case 9 -> new double[]{0.05, 500, 1, 0.01};       //Мышь
-            case 10 -> new double[]{60, 140, 3, 10};          //Коза
-            case 11 -> new double[]{70, 140, 3, 15};          //Овца
-            case 12 -> new double[]{400, 50, 2, 50};          //Кабан
-            case 13 -> new double[]{700, 10, 3, 100};         //Буйвол
-            case 14 -> new double[]{1, 200, 4, 0.15};         //Утка
-            case 15 -> new double[]{0.01, 1000, 0, 0};        //Гусеница
+            case 1 -> new BigDecimal[]{new BigDecimal("50"), new BigDecimal("30"), new BigDecimal("3"), new BigDecimal("8")};             //Волк
+            case 2 -> new BigDecimal[]{new BigDecimal("15"), new BigDecimal("30"), new BigDecimal("1"), new BigDecimal("3")};             //Удав
+            case 3 -> new BigDecimal[]{new BigDecimal("8"), new BigDecimal("30"), new BigDecimal("2"), new BigDecimal("2")};              //Лиса
+            case 4 -> new BigDecimal[]{new BigDecimal("500"), new BigDecimal("5"), new BigDecimal("2"), new BigDecimal("80")};            //Медведь
+            case 5 -> new BigDecimal[]{new BigDecimal("6"), new BigDecimal("10"), new BigDecimal("3"), new BigDecimal("1")};              //Орел
+            case 6 -> new BigDecimal[]{new BigDecimal("400"), new BigDecimal("20"), new BigDecimal("4"), new BigDecimal("60")};           //Лошадь
+            case 7 -> new BigDecimal[]{new BigDecimal("300"), new BigDecimal("20"), new BigDecimal("4"), new BigDecimal("50")};           //Олень
+            case 8 -> new BigDecimal[]{new BigDecimal("2"), new BigDecimal("150"), new BigDecimal("2"), new BigDecimal("0.45")};          //Кролик
+            case 9 -> new BigDecimal[]{new BigDecimal("0.05"), new BigDecimal("500"), new BigDecimal("1"), new BigDecimal("0.01")};       //Мышь
+            case 10 -> new BigDecimal[]{new BigDecimal("60"), new BigDecimal("140"), new BigDecimal("3"), new BigDecimal("10")};          //Коза
+            case 11 -> new BigDecimal[]{new BigDecimal("70"), new BigDecimal("140"), new BigDecimal("3"), new BigDecimal("15")};          //Овца
+            case 12 -> new BigDecimal[]{new BigDecimal("400"), new BigDecimal("50"), new BigDecimal("2"), new BigDecimal("50")};          //Кабан
+            case 13 -> new BigDecimal[]{new BigDecimal("700"), new BigDecimal("10"), new BigDecimal("3"), new BigDecimal("100")};         //Буйвол
+            case 14 -> new BigDecimal[]{new BigDecimal("1"), new BigDecimal("200"), new BigDecimal("4"), new BigDecimal("0.15")};         //Утка
+            case 15 -> new BigDecimal[]{new BigDecimal("0.01"), new BigDecimal("1000"), new BigDecimal("0"), new BigDecimal("0")};        //Гусеница
 
             default -> null;
         };
@@ -112,7 +119,7 @@ public class DataBase {
 
     //animalName, icon, animalParameters[0], (int) animalParameters[3], whoToEatAndHowToEat, conditionX, conditionY
     public Animal allAnimal
-    (String animalName, String icon, double weight, int speedCell, double maximumSatiety, int[] whoToEatAndHowToEat, int id) {
+    (String animalName, String icon, BigDecimal weight, int speedCell, BigDecimal maximumSatiety, int[] whoToEatAndHowToEat, int id) {
         return switch (animalName) {
             case "Wolf" ->
                     new Wolf(icon, weight, speedCell, maximumSatiety, whoToEatAndHowToEat, id);            //Волк
@@ -149,7 +156,8 @@ public class DataBase {
     }
 
     public Vegetation allVegetation() {
-        return new Grass();            //Трава
+        BigDecimal weight = new BigDecimal("1.0");
+        return new Grass(weight);            //Трава
     }
 
     public double[] vegetationParameters() {

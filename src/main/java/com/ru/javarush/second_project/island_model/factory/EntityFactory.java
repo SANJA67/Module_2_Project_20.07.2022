@@ -4,6 +4,8 @@ import com.ru.javarush.second_project.island_model.game_objects.animal.abstracts
 import com.ru.javarush.second_project.island_model.game_objects.vegetation.abstracts.Vegetation;
 import com.ru.javarush.second_project.island_model.storage.DataBase;
 
+import java.math.BigDecimal;
+
 public class EntityFactory {
 
     public Vegetation readyVegetation(DataBase dataBase, int numberObjects) {
@@ -15,11 +17,11 @@ public class EntityFactory {
 
         String icon = dataBase.giveMeAnIcon(id);
 
-        double[] animalParameters = dataBase.animalParameters(id);
+        BigDecimal[] animalParameters = dataBase.getDoublesObject().get(id - 1);
 
         int[] whoToEatAndHowToEat = dataBase.whoToEatAndHowToEat(id);
 
-        return dataBase.allAnimal(animalName, icon, animalParameters[0], (int) animalParameters[2], animalParameters[3],
+        return dataBase.allAnimal(animalName, icon, animalParameters[0], animalParameters[2].intValue(), animalParameters[3],
                 whoToEatAndHowToEat, id);
     }
 

@@ -20,7 +20,9 @@ public class MyClass {
         System.out.println(ProgramCommunication.LANGUAGE_SELECTION);
         boolean initialLanguageType = true;
         boolean language = settings.flagRegulator(pc, initialLanguageType);
-        settings.selectsDefaultSettingsOrCustomSettings(pc, language);
+        settings.setUpOrLeave(pc, language);
+
+        pc.gameOver(language);
     }
 
 }
